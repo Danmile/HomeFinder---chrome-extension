@@ -1,8 +1,5 @@
 import axios from "axios";
-import dotenv from "dotenv";
 import { storedAds } from "./store/store.js";
-
-dotenv.config();
 
 // Function to fetch from Yad2
 export async function fetchAds(addressId, addressText, price, key) {
@@ -79,20 +76,4 @@ export function generateMessage(newAds) {
     })
     .join("\n\n");
   return adMessages;
-}
-
-export async function sendTelegramMessage(chatId, message) {
-  const url = `https://api.telegram.org/bot${process.env.TELEGRAMTOKEN}/sendMessage`;
-
-  try {
-    const res = await axios.post(url, {
-      chat_id: chatId,
-      text: message,
-      parse_mode: "HTML", // optional, for bold/italic/links
-    });
-
-    console.log("Message sent:", res.data);
-  } catch (err) {
-    console.error("Telegram send error:", err.response?.data || err.message);
-  }
 }

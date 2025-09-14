@@ -26,9 +26,9 @@ cron.schedule("*/3 * * * *", async () => {
       try {
         const ads = await fetchAds(item);
         const message = generateMessage(ads);
-        // if (message) {
-        //   await sendTelegramMessage("-4808228076", message);
-        // }
+        if (message) {
+          await sendTelegramMessage(process.env.TELEGRAMBOT, message);
+        }
         console.log(`Messages for ${address}, ${price}:`, message);
       } catch (error) {
         console.error(`Error fetching for ${address}, ${price}:`, error);
