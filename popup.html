@@ -1,0 +1,29 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./popup.css" />
+    <title>HomeFinder</title>
+  </head>
+  <body>
+    <div class="card">
+      <h1 class="header">HomeFinder</h1>
+      <form id="subForm">
+        <select class="inputFrom" id="dropDownNeighbor">
+          <option value="">Choose address</option>
+        </select>
+        <input
+          id="priceInput"
+          type="number"
+          class="inputFrom"
+          placeholder="Enter price"
+        />
+        <button class="subButton" type="submit">Notify me</button>
+        <p id="response"></p>
+      </form>
+    </div>
+    <h2>Currently on:</h2>
+    <div id="searches" class="gridContainer"></div>
+    <script src="popup.js"></script>
+  </body>
+</html>
