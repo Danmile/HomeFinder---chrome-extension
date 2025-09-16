@@ -18,7 +18,6 @@ export async function fetchAds(addressId, addressText, price, key) {
     );
     //Check if the key is already in store
     if (!storedAds.has(key)) {
-      console.log("filtered first: ", filtered.length);
       storedAds.set(key, filtered);
       return [];
     }
@@ -32,8 +31,6 @@ export async function fetchAds(addressId, addressText, price, key) {
     if (newOnes.length > 0) {
       storedAds.set(key, [...existing, ...newOnes]);
     }
-    console.log("filtered: ", filtered.length);
-    console.log("existing: ", existing.length);
     return newOnes;
   } catch (err) {
     console.error("FetchAds - Error fetching:", err);

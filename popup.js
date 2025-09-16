@@ -8,6 +8,9 @@ let addressValue;
 const neighborhoods = [
   { id: 13, name: "רובע י" },
   { id: 15, name: "רובע הסיטי" },
+  { id: 16, name: "רובע יא" },
+  { id: 17, name: "רובע יג" },
+  { id: 18, name: "רובע יב" },
 ];
 
 // populate dropdown
