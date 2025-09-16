@@ -55,9 +55,9 @@ form.onsubmit = async (e) => {
   }
 
   // Check for duplicates
-  const isDuplicate = checkDuplicate(addressValue.text, priceValue);
+  const isDuplicate = checkDuplicate(addressValue.text);
   if (isDuplicate) {
-    pRes.innerHTML = "This address and price already exists";
+    pRes.innerHTML = "This address already exists";
     return;
   }
 
@@ -124,13 +124,13 @@ function renderSearchItems(addressValue, priceValue, response) {
   searches.appendChild(item);
 }
 
-function checkDuplicate(addressValue, priceValue) {
+function checkDuplicate(addressValue) {
   const existingItems = searches.querySelectorAll(".grid-item");
   let isDuplicate = false;
   for (const item of existingItems) {
     const existingAddress = item.dataset.address;
     const existingPrice = item.dataset.price;
-    if (existingAddress === addressValue && existingPrice === priceValue) {
+    if (existingAddress === addressValue) {
       isDuplicate = true;
       break;
     }

@@ -7,6 +7,7 @@ import { fetchAds, generateMessage } from "./scripts.js";
 import { sendTelegramMessage } from "./utils/sendTelegramMessage.js";
 import cron from "node-cron";
 import { searchList } from "./store/store.js";
+import { connectDB } from "./lib/db.js";
 
 dotenv.config();
 
@@ -37,4 +38,5 @@ cron.schedule("*/3 * * * *", async () => {
 
 app.listen(PORT, () => {
   console.log(`Server running on localhost:${PORT}`);
+  connectDB();
 });

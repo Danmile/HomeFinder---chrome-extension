@@ -1,10 +1,9 @@
 import axios from "axios";
-import { storedAds } from "./store/store.js";
+import { Ad } from "./models/ad.model.js";
 
 // Function to fetch from Yad2
-export async function fetchAds(addressId, addressText, price, key) {
-  const url = `https://gw.yad2.co.il/realestate-feed/rent/map?city=0070&area=21&topArea=41&neighborhood=${addressId}&maxPrice=${price}`;
-
+export async function fetchAds(addressId, price, key) {
+  const url = `https://gw.yad2.co.il/realestate-feed/rent/map?city=0070&area=21&topArea=41&neighborhood=${addressId}&maxPrice=${price.toString()}`;
   try {
     const res = await fetch(url);
     if (!res.ok) {
@@ -17,20 +16,20 @@ export async function fetchAds(addressId, addressText, price, key) {
       (apr) => apr.price && apr.address?.neighborhood?.text
     );
     //Check if the key is already in store
-    if (!storedAds.has(key)) {
-      storedAds.set(key, filtered);
-      return [];
-    }
+    const existing = await Ad.find({ key }).lean();
 
-    const existing = storedAds.get(key);
     // Find only new ones
     const newOnes = filtered.filter(
       (apr) => !existing.some((s) => s.orderId === apr.orderId)
     );
 
     if (newOnes.length > 0) {
-      storedAds.set(key, [...existing, ...newOnes]);
+      const docs = newOnes.map((ad) => ({ ...ad, key }));
+      await Ad.insertMany(docs);
     }
+    console.log("Running fetchAds: ", Date.now());
+    console.log("Existing: ", existing.length);
+    console.log("filtered: ", filtered.length);
     return newOnes;
   } catch (err) {
     console.error("FetchAds - Error fetching:", err);
@@ -38,24 +37,22 @@ export async function fetchAds(addressId, addressText, price, key) {
   }
 }
 
-export function deleteAds(key) {
+export async function deleteAds(key) {
   try {
-    const result = storedAds.delete(key);
-    return result;
+    await Ad.deleteMany({ key });
   } catch (error) {
     console.error("Error deleting:", error);
   }
 }
 
-export function getAds() {
+export async function getAds() {
   try {
-    if (storedAds.size > 0) {
-      const searches = Array.from(storedAds.keys()).map((key) => {
-        const [address, price] = key.split("|");
-        return { address, price };
-      });
-      return searches;
-    }
+    const keys = await Ad.distinct("key");
+    console.log(keys);
+    return keys.map((key) => {
+      const [address, price] = key.split("|");
+      return { address, price };
+    });
   } catch (error) {
     console.error("getAds - Error fetching:", error);
   }
