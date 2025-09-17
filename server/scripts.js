@@ -27,9 +27,6 @@ export async function fetchAds(addressId, price, key) {
       const docs = newOnes.map((ad) => ({ ...ad, key }));
       await Ad.insertMany(docs);
     }
-    console.log("Running fetchAds: ", Date.now());
-    console.log("Existing: ", existing.length);
-    console.log("filtered: ", filtered.length);
     return newOnes;
   } catch (err) {
     console.error("FetchAds - Error fetching:", err);
@@ -48,7 +45,6 @@ export async function deleteAds(key) {
 export async function getAds() {
   try {
     const keys = await Ad.distinct("key");
-    console.log(keys);
     return keys.map((key) => {
       const [address, price] = key.split("|");
       return { address, price };

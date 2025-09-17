@@ -9,7 +9,6 @@ export const submitAd = async (req, res) => {
       return res.status(400).json({ error: "Missing address or price" });
 
     const key = `${addressText}|${price}`;
-    console.log("key sub:", key);
     const priceNum = Number(price);
     const exists = await searchList.findOne({
       address: addressText,

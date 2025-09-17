@@ -2,6 +2,19 @@ import { fetchAds, generateMessage } from "./scripts.js";
 import { sendTelegramMessage } from "./utils/sendTelegramMessage.js";
 import { searchList } from "./store/store.js";
 
+const connectDB = async () => {
+  try {
+    const mongoURI = process.env.MONGO_URI;
+    if (!mongoURI) {
+      throw new Error("MongoURI is not defined");
+    }
+    const conn = await mongoose.connect(mongoURI);
+    console.log("MongoDB connected: ", conn.connection.host);
+  } catch (error) {
+    console.log("MongoDB connection error ", error);
+  }
+};
+
 async function checkAds() {
   if (searchList.size > 0) {
     console.log("Checking ads at: -", new Date().toISOString());
@@ -22,4 +35,13 @@ async function checkAds() {
       }
     }
   }
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  connectDB().then(() =>
+    checkAds().then(() => {
+      console.log("Check completed");
+      process.exit(0);
+    })
+  );
 }
