@@ -5,9 +5,16 @@ import { Ad } from "./models/ad.model.js";
 export async function fetchAds(addressId, price, key) {
   const url = `https://gw.yad2.co.il/realestate-feed/rent/map?city=0070&area=21&topArea=41&neighborhood=${addressId.toString()}&maxPrice=${price.toString()}`;
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+        Accept: "application/json,text/html",
+      },
+    });
     if (!res.ok) {
       console.error(`FetchAds - HTTP ${res.status}: ${res.statusText}`);
+      const text = await res.text();
+      console.log("Response body:", text);
       return [];
     }
     const data = await res.json();
