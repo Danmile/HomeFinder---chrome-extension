@@ -1,5 +1,5 @@
 import { fetchAds, generateMessage } from "../scripts.js";
-import { sendTelegramMessage } from "./utils/sendTelegramMessage.js";
+import { sendTelegramMessage } from "../utils/sendTelegramMessage.js";
 import mongoose from "mongoose";
 import { searchList } from "../models/searchList.model.js";
 
