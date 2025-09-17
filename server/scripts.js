@@ -15,7 +15,7 @@ export async function fetchAds(addressId, price, key) {
       console.error(`FetchAds - HTTP ${res.status}: ${res.statusText}`);
       return [];
     }
-    const data = res.json();
+    const data = await res.json();
     const apartments = data.data?.markers || [];
     const filtered = apartments.filter(
       (apr) => apr.price && apr.address?.neighborhood?.text
