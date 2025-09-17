@@ -11,23 +11,11 @@ export async function fetchAds(addressId, price, key) {
         Accept: "application/json,text/html",
       },
     });
-    //yad2 blocking
-    const raw = await res.text();
-    if (raw.includes("Bot Manager") || raw.includes("Captcha")) {
-      console.warn("Blocked by Yad2 bot protection, skipping fetch.");
-      return [];
-    }
     if (!res.ok) {
       console.error(`FetchAds - HTTP ${res.status}: ${res.statusText}`);
       return [];
     }
-    let data;
-    try {
-      data = JSON.parse(raw);
-    } catch (err) {
-      console.error("FetchAds - Invalid JSON, snippet:", raw.slice(0, 200));
-      return [];
-    }
+    const data = res.json();
     const apartments = data.data?.markers || [];
     const filtered = apartments.filter(
       (apr) => apr.price && apr.address?.neighborhood?.text
