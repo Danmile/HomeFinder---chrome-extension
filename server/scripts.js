@@ -17,7 +17,16 @@ export async function fetchAds(addressId, price, key) {
       console.log("Response body:", text);
       return [];
     }
-    const data = await res.json();
+    const raw = await res.text();
+    let data;
+    try {
+      data = JSON.parse(raw);
+    } catch (e) {
+      console.error("FetchAds - Response is not JSON, dumping snippet:");
+      console.error(raw.slice(0, 500));
+      return [];
+    }
+
     const apartments = data.data?.markers || [];
     const filtered = apartments.filter(
       (apr) => apr.price && apr.address?.neighborhood?.text
