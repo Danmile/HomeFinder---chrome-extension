@@ -7,27 +7,28 @@ export async function fetchAds(addressId, price, key) {
   try {
     const res = await fetch(url, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
-        Accept: "application/json,text/html",
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123 Safari/537.36",
+        Accept: "application/json, text/plain, */*",
       },
     });
-    if (!res.ok) {
-      console.error(`FetchAds - HTTP ${res.status}: ${res.statusText}`);
-      const text = await res.text();
-      console.log("Response body:", text);
+    //yad2 blocking
+    const raw = await res.text();
+    if (raw.includes("Bot Manager") || raw.includes("Captcha")) {
+      console.warn("Blocked by Yad2 bot protection, skipping fetch.");
       return [];
     }
-    const raw = await res.text();
-    console.log(raw.slice(0, 500));
+    if (!res.ok) {
+      console.error(`FetchAds - HTTP ${res.status}: ${res.statusText}`);
+      return [];
+    }
     let data;
     try {
       data = JSON.parse(raw);
-    } catch (e) {
-      console.error("FetchAds - Response is not JSON, dumping snippet:");
-      console.error(raw.slice(0, 500));
+    } catch (err) {
+      console.error("FetchAds - Invalid JSON, snippet:", raw.slice(0, 200));
       return [];
     }
-
     const apartments = data.data?.markers || [];
     const filtered = apartments.filter(
       (apr) => apr.price && apr.address?.neighborhood?.text
