@@ -41,7 +41,7 @@ export async function fetchAds(addressId, price, key) {
     }
     return newOnes;
   } catch (err) {
-    console.error("FetchAds - Error fetching:", err);
+    console.error("FetchAds - Error fetching:", err.message);
     return [];
   }
 }
