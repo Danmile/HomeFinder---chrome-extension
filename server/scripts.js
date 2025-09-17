@@ -24,6 +24,11 @@ export async function fetchAds(addressId, price, key) {
     );
     //Check if the key is already in store
     const existing = await Ad.find({ key }).lean();
+    if (!existing.length) {
+      const docs = filtered.map((ad) => ({ ...ad, key }));
+      if (docs.length > 0) await Ad.insertMany(docs);
+      return [];
+    }
 
     // Find only new ones
     const newOnes = filtered.filter(
