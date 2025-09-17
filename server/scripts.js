@@ -18,6 +18,7 @@ export async function fetchAds(addressId, price, key) {
       return [];
     }
     const raw = await res.text();
+    console.log(raw.slice(0, 500));
     let data;
     try {
       data = JSON.parse(raw);
