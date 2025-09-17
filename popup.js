@@ -29,7 +29,9 @@ dropdown.addEventListener("change", (e) => {
 //Render the DOM by current items that is searched
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    const res = await fetch("http://localhost:4000/api/ads");
+    const res = await fetch(
+      "https://homefinder-chrome-extension.onrender.com/api/ads"
+    );
     const searchesData = await res.json();
 
     searches.innerHTML = ""; // clear UI before rendering
@@ -62,15 +64,18 @@ form.onsubmit = async (e) => {
   }
 
   try {
-    const res = await fetch("http://localhost:4000/api/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        addressId: addressValue.id,
-        addressText: addressValue.text,
-        price: priceValue,
-      }),
-    });
+    const res = await fetch(
+      "https://homefinder-chrome-extension.onrender.com/api/submit",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          addressId: addressValue.id,
+          addressText: addressValue.text,
+          price: priceValue,
+        }),
+      }
+    );
     const response = await res.json();
     if (res.ok) {
       renderSearchItems(addressValue.text, priceValue, response);
@@ -99,14 +104,17 @@ function renderSearchItems(addressValue, priceValue, response) {
   // Add remove listener
   item.querySelector(".buttonRed").addEventListener("click", async () => {
     try {
-      const removeRes = await fetch("http://localhost:4000/api/remove", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          address: item.dataset.address,
-          price: item.dataset.price,
-        }),
-      });
+      const removeRes = await fetch(
+        "https://homefinder-chrome-extension.onrender.com/api/remove",
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            address: item.dataset.address,
+            price: item.dataset.price,
+          }),
+        }
+      );
       const result = await removeRes.json();
       if (removeRes.status === 200) {
         item.remove();

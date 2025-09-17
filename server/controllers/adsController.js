@@ -19,7 +19,11 @@ export const submitAd = async (req, res) => {
         .status(400)
         .json({ error: "This address and price already exists" });
     try {
-      await searchList.create({ address: addressText, price: priceNum });
+      await searchList.create({
+        address: addressText,
+        price: priceNum,
+        addressId,
+      });
     } catch (error) {
       console.error("Error in creating list: ", error);
     }
