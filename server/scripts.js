@@ -3,7 +3,7 @@ import { Ad } from "./models/ad.model.js";
 
 // Function to fetch from Yad2
 export async function fetchAds(addressId, price, key) {
-  const url = `https://gw.yad2.co.il/realestate-feed/rent/map?city=0070&area=21&topArea=41&neighborhood=${addressId}&maxPrice=${price.toString()}`;
+  const url = `https://gw.yad2.co.il/realestate-feed/rent/map?city=0070&area=21&topArea=41&neighborhood=${addressId.toString()}&maxPrice=${price.toString()}`;
   try {
     const res = await fetch(url);
     if (!res.ok) {
@@ -57,11 +57,11 @@ export async function getAds() {
 export function generateMessage(newAds) {
   const adMessages = newAds
     .map((ad) => {
-      return `${ad.address.city.text || "רחוב לא מצויין"} - ${
-        ad.address.neighborhood.text || ""
+      return `${ad.address?.city?.text || "רחוב לא מצויין"} - ${
+        ad.address?.neighborhood?.text || ""
       },
-      ${ad.address.street.text || ""} - ${ad.price || "לא צוין"} - מחיר
-      חדרים ${ad.additionalDetails.roomsCount || "לא צוין"},
+      ${ad.address?.street?.text || ""} - ${ad.price || "לא צוין"} - מחיר
+      חדרים ${ad.additionalDetails?.roomsCount || "לא צוין"},
       https://www.yad2.co.il/realestate/item/${ad.token}`;
     })
     .join("\n\n");

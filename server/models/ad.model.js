@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const adSchema = new mongoose.Schema({
   key: String,
-  orderId: String,
+  orderId: Number,
   address: Object,
   price: Number,
   additionalDetails: Object,

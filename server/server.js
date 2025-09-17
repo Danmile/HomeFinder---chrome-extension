@@ -4,6 +4,10 @@ import cors from "cors";
 import dotenv from "dotenv";
 import adsRoutes from "./routes/ads.js";
 import { connectDB } from "./lib/db.js";
+import { searchList } from "./models/searchList.model.js";
+import { fetchAds, generateMessage } from "./scripts.js";
+import { sendTelegramMessage } from "./utils/sendTelegramMessage.js";
+import cron from "node-cron";
 
 dotenv.config();
 
@@ -16,20 +20,23 @@ app.use("/api", adsRoutes);
 
 // Run every 3 min
 // cron.schedule("*/3 * * * *", async () => {
-//   if (searchList.size > 0) {
-//     console.log("Checking ads at: -", new Date().toISOString());
+//   const searches = await searchList.find({});
 
-//     for (const item of searchList) {
-//       const [address, price] = item.split("|");
-//       try {
-//         const ads = await fetchAds(item);
-//         const message = generateMessage(ads);
-//         if (message) {
-//           await sendTelegramMessage(process.env.TELEGRAMBOT, message);
-//         }
-//       } catch (error) {
-//         console.error(`Error fetching for ${address}, ${price}:`, error);
+//   for (const s of searches) {
+//     const { addressId, address, price } = s;
+//     const key = `${address}|${price}`;
+
+//     try {
+//       const ads = await fetchAds(addressId, price, key);
+//       const message = generateMessage(ads);
+//       if (message) {
+//         await sendTelegramMessage(process.env.TELEGRAMBOT, message);
+//         console.log(`Sent message for ${address}, ${price}`);
+//       } else {
+//         console.log(`No new ads for ${address}, ${price}`);
 //       }
+//     } catch (error) {
+//       console.error(`Error fetching for ${address}, ${price}:`, error);
 //     }
 //   }
 // });

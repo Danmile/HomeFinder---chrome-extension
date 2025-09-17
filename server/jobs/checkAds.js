@@ -1,4 +1,4 @@
-import { fetchAds, generateMessage } from "./scripts.js";
+import { fetchAds, generateMessage } from "../scripts.js";
 import { sendTelegramMessage } from "./utils/sendTelegramMessage.js";
 import mongoose from "mongoose";
 import { searchList } from "../models/searchList.model.js";
@@ -24,7 +24,7 @@ async function checkAds() {
     const key = `${address}|${price}`;
 
     try {
-      const ads = await fetchAds(addressId, address, price, key);
+      const ads = await fetchAds(addressId, price, key);
       const message = generateMessage(ads);
       if (message) {
         await sendTelegramMessage(process.env.TELEGRAMBOT, message);
